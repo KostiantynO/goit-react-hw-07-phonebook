@@ -4,11 +4,11 @@ import { ContactItemStyled, DeleteContactBtn } from './ContactItem.styled';
 import { AiOutlineClose } from 'react-icons/ai';
 
 export const ContactItem = ({
-  contact: { id, name, number },
+  contact: { id, name, phone },
   onDeleteContact,
 }) => (
   <ContactItemStyled>
-    <span>{name}</span>&nbsp;<span>{number}</span>
+    <span>{name}</span>&nbsp;<span>{phone}</span>
     <DeleteContactBtn onClick={() => onDeleteContact(id)} display="if" round>
       <AiOutlineClose />
     </DeleteContactBtn>

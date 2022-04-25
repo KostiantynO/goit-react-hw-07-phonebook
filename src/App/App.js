@@ -1,7 +1,16 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { toast, ToastContainer } from 'react-toastify';
-import * as contactsActions from 'redux/contactsSlices';
-import { Section } from 'common';
+
+import {
+  setFilter,
+  useCreateContactMutation,
+  useDeleteContactMutation,
+  useFetchContactsQuery,
+} from 'redux/contactsApi';
+
+import { getContactsFilter, getVisibleContacts } from 'redux/contactsSelectors';
+
+import { Button, Section } from 'common';
 import { ContactForm, ContactList, Filter } from 'components';
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -9,20 +18,16 @@ import { AppStyled } from './App.styled';
 
 export const App = () => {
   const dispatch = useDispatch();
-  const contacts = useSelector(state => state.contacts.items);
-  const storedFilter = useSelector(state => state.contacts.filter);
+  const filter = useSelector(getContactsFilter);
 
-  const getVisibleContacts = () => {
-    const normalizedFilter = storedFilter.toLowerCase();
+  const [addContact] = useCreateContactMutation();
+  const { data: contacts, isFetching } = useFetchContactsQuery();
+  const [deleteContact] = useDeleteContactMutation();
 
-    if (contacts.length <= 0) return [];
+  const visibleContacts = contacts && getVisibleContacts(contacts, filter);
+  const showContacts = visibleContacts && !isFetching;
 
-    return contacts.filter(({ name }) =>
-      name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  const onSubmitAddContact = ({ name, number }) => {
+  const onSubmitAddContact = ({ name, phone }) => {
     const normalizedNewName = name.toLowerCase();
     const savedContact = contacts.find(
       ({ name }) => name.toLowerCase() === normalizedNewName
@@ -32,18 +37,19 @@ export const App = () => {
       return toast.error(`${savedContact.name} is already saved`);
     }
 
-    const newContact = { name, number };
-    dispatch(contactsActions.addContact(newContact));
+    addContact({ name, phone });
   };
 
-  const onDeleteContact = toDeleteId => {
-    dispatch(contactsActions.deleteContact(toDeleteId));
+  const onChangeFilter = e => dispatch(setFilter(e.target.value));
+  const onClearFilter = () => dispatch(setFilter(''));
+
+  const onDeleteContact = id => deleteContact(id);
+
+  const batchDeleteContacts = () => {
+    visibleContacts
+      .filter(({ selected }) => selected)
+      .forEach(({ id }) => deleteContact(id));
   };
-
-  const changeFilter = e => dispatch(contactsActions.setFilter(e.target.value));
-  const clearFilter = () => dispatch(contactsActions.setFilter(''));
-
-  const visibleContacts = getVisibleContacts();
 
   return (
     <AppStyled>
@@ -53,15 +59,19 @@ export const App = () => {
 
       <Section title="Contacts">
         <Filter
-          value={storedFilter}
-          onChangeFilter={changeFilter}
-          onClearFilter={clearFilter}
+          value={filter}
+          onChangeFilter={onChangeFilter}
+          onClearFilter={onClearFilter}
         />
 
-        <ContactList
-          contacts={visibleContacts}
-          onDeleteContact={onDeleteContact}
-        />
+        <Button onClick={batchDeleteContacts}>Delete selected contacts</Button>
+
+        {showContacts && (
+          <ContactList
+            contacts={visibleContacts}
+            onDeleteContact={onDeleteContact}
+          />
+        )}
       </Section>
 
       <ToastContainer autoClose={1000} />
