@@ -1,15 +1,21 @@
 import { PropTypes, Container, Label } from 'common';
 import { ClearFilterButton } from 'common/components/Button';
+import { LoadingIcon } from 'common/components/icons';
 import { DebouncedInputStyled } from './Filter.styled';
 
-export const Filter = ({ value, onChangeFilter, onClearFilter }) => (
+export const Filter = ({
+  isFetching,
+  value,
+  onChangeFilter,
+  onClearFilter,
+}) => (
   <>
     <Container>
       <Label label="Find contact by name or phone" htmlFor="filter" />
     </Container>
 
     <Container>
-      <div style={{ display: 'flex', gap: 12 }}>
+      <div style={{ display: 'flex', gap: 12, position: 'relative' }}>
         <Label label="Filter">
           <DebouncedInputStyled
             type="text"
@@ -23,6 +29,8 @@ export const Filter = ({ value, onChangeFilter, onClearFilter }) => (
         <ClearFilterButton display="if" onClick={onClearFilter}>
           Clear filter
         </ClearFilterButton>
+
+        {isFetching && <LoadingIcon width={36} />}
       </div>
     </Container>
   </>

@@ -2,8 +2,10 @@ import { PropTypes } from 'common';
 import {
   ContactItemStyled,
   DeleteContactButton,
-  ContactLabel,
   SelectContactCheckbox,
+  ContactEditWrapper,
+  ContactLabelPhone,
+  ContactLabelName,
   ContactEditInput,
 } from './ContactItem.styled';
 
@@ -30,12 +32,10 @@ export const ContactItem = ({ id, name, phone, selected }) => {
   const [localPhone, setLocalPhone] = useState(() => phone);
 
   useEffect(() => {
-    if (isUpdated) {
-      toast.success('Contact updated', toastConfig);
-    }
-
     if (isDeleted) {
       toast.success('Contact deleted', toastConfig);
+    } else if (isUpdated) {
+      toast.success('Contact updated', toastConfig);
     }
   }, [isUpdated, isDeleted]);
 
@@ -66,27 +66,29 @@ export const ContactItem = ({ id, name, phone, selected }) => {
         />
       </label>
 
-      <ContactLabel>
-        <ContactEditInput
-          type="text"
-          name="editName"
-          value={localName}
-          onChange={onSetLocalName}
-          onBlur={submitNameUpdate}
-          disabled={disabled}
-        />
-      </ContactLabel>
+      <ContactEditWrapper>
+        <ContactLabelName>
+          <ContactEditInput
+            type="text"
+            name="editName"
+            value={localName}
+            onChange={onSetLocalName}
+            onBlur={submitNameUpdate}
+            disabled={disabled}
+          />
+        </ContactLabelName>
 
-      <ContactLabel>
-        <ContactEditInput
-          type="tel"
-          name="editPhone"
-          value={localPhone}
-          onChange={onSetLocalPhone}
-          onBlur={submitPhoneUpdate}
-          disabled={disabled}
-        />
-      </ContactLabel>
+        <ContactLabelPhone>
+          <ContactEditInput
+            type="tel"
+            name="editPhone"
+            value={localPhone}
+            onChange={onSetLocalPhone}
+            onBlur={submitPhoneUpdate}
+            disabled={disabled}
+          />
+        </ContactLabelPhone>
+      </ContactEditWrapper>
 
       {/* */}
 

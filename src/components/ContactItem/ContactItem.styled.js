@@ -5,12 +5,8 @@ export const ContactItemStyled = styled.li`
   position: relative;
 
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
   align-items: center;
-
-  @media screen and (min-width: 768px) {
-    flex-wrap: nowrap;
-  }
 
   padding: ${({ theme }) => theme.spacing(2, 5, 2, 2)};
 
@@ -46,9 +42,20 @@ export const ContactItemStyled = styled.li`
   }
 `;
 
-export const ContactLabel = styled.label`
-  @media screen and (min-width: 768px) {
-    flex-basis: 45%;
+export const ContactEditWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
+
+export const ContactLabelName = styled.label`
+  width: 60%;
+`;
+
+export const ContactLabelPhone = styled.label`
+  width: 40%;
+  > input {
+    text-align: end;
   }
 `;
 
@@ -60,7 +67,7 @@ export const SelectContactCheckbox = styled.input.attrs({ type: 'checkbox' })`
 export const ContactEditInput = styled.input`
   width: 100%;
   padding: ${({ theme }) => theme.spacing(1, 2)};
-  font-size: inherit;
+  font-size: clamp(0.8rem, 3vw, 1rem);
   color: inherit;
   word-break: break-word;
   background-color: ${({ disabled }) => !disabled && 'transparent'};

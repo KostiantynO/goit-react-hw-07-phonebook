@@ -15,18 +15,16 @@ import { ContactForm, ContactList, Filter } from 'components';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { AppStyled } from './App.styled';
-import { LoadingIcon } from 'common/components/icons';
 
 export const App = () => {
   const dispatch = useDispatch();
   const filter = useSelector(getContactsFilter);
 
-  const [addContact] = useCreateContactMutation();
   const { data: contacts, isFetching } = useFetchContactsQuery();
+  const [addContact, { isLoading: isAdding }] = useCreateContactMutation();
   const [deleteContact, { isLoading: isDeleting }] = useDeleteContactMutation();
 
   const visibleContacts = contacts && getVisibleContacts(contacts, filter);
-  const showContacts = visibleContacts && !isFetching;
 
   const onSubmitAddContact = ({ name, phone }) => {
     const normalizedNewName = name.toLowerCase();
@@ -55,7 +53,7 @@ export const App = () => {
   return (
     <AppStyled>
       <Section title="Phonebook" h="1">
-        <ContactForm onSubmit={onSubmitAddContact} />
+        <ContactForm isAdding={isAdding} onSubmit={onSubmitAddContact} />
       </Section>
 
       <Section title="Contacts">
@@ -63,15 +61,14 @@ export const App = () => {
           value={filter}
           onChangeFilter={onChangeFilter}
           onClearFilter={onClearFilter}
+          isFetching={isFetching}
         />
 
         <Button onClick={batchDeleteContacts} disabled={isDeleting}>
           Delete selected
         </Button>
 
-        {isFetching && <LoadingIcon width={36} />}
-
-        {showContacts && (
+        {visibleContacts && (
           <ContactList
             contacts={visibleContacts}
             onDeleteContact={onDeleteContact}

@@ -116,4 +116,8 @@ export const LoadingIcon = styled(ThreeDots).attrs(
     fill: fill ?? theme.colors.accent,
     width: width ?? 36,
   })
-)``;
+)`
+  position: absolute;
+  top: 0;
+  right: 0;
+`;
