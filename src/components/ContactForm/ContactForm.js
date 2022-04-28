@@ -12,8 +12,16 @@ export const ContactForm = ({ onSubmit }) => {
   const handleInputChange = e => {
     const { name, value } = e.target;
 
-    inputsNameProp.name === name && setName(value);
-    inputsNameProp.number === name && setNumber(value);
+    switch (name) {
+      case inputsNameProp.name:
+        return setName(value);
+
+      case inputsNameProp.number:
+        return setNumber(value);
+
+      default:
+        break;
+    }
   };
 
   const reset = () => {

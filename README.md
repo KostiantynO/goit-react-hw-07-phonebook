@@ -36,7 +36,7 @@ netlify login
 }
 ```
 
-    Website URL: https://ko-goit-react-hw-07-phonebook.netlify.app/
+Website URL: https://ko-goit-react-hw-07-phonebook.netlify.app/
 
 `.gitignore`
 

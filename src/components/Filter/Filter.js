@@ -5,7 +5,7 @@ import { DebouncedInputStyled } from './Filter.styled';
 export const Filter = ({ value, onChangeFilter, onClearFilter }) => (
   <>
     <Container>
-      <Label label="Find contact by name" htmlFor="filter" />
+      <Label label="Find contact by name or phone" htmlFor="filter" />
     </Container>
 
     <Container>

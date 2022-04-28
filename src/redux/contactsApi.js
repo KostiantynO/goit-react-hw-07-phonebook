@@ -9,37 +9,44 @@ export const contactsApi = createApi({
   tagTypes: ['Contacts'],
 
   endpoints: builder => ({
-    createContact: builder.mutation({
-      query: newContact => ({
-        url: '/contacts',
-        method: 'POST',
-        body: newContact,
-      }),
-      invalidatesTags: ['Contacts'],
-    }),
-
     fetchContacts: builder.query({
       query: () => '/contacts',
-      providesTags: ['Contacts'],
+      providesTags: result =>
+        result
+          ? [
+              ...result.map(({ id }) => ({ type: 'Contacts', id })),
+              { type: 'Contacts', id: 'LIST' },
+            ]
+          : [{ type: 'Contacts', id: 'LIST' }],
     }),
 
-    fetchContactById: builder.query({
-      query: id => `/contacts/${id}`,
-      providesTags: ['Contact'],
+    createContact: builder.mutation({
+      query: body => ({
+        url: '/contacts',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: [{ type: 'Contacts', id: 'LIST' }],
     }),
 
     updateContact: builder.mutation({
-      query: updatedContact => ({
-        url: `/contacts/${updatedContact.id}`,
+      query: body => ({
+        url: `/contacts/${body.id}`,
         method: 'PUT',
-        body: updatedContact,
+        body,
       }),
-      invalidatesTags: ['Contacts'],
+      invalidatesTags: (result, error, arg) =>
+        console.log({ result, error, arg }) || [
+          { type: 'Contacts', id: arg.id },
+        ],
     }),
 
     deleteContact: builder.mutation({
       query: contactId => ({ url: `/contacts/${contactId}`, method: 'DELETE' }),
-      invalidatesTags: ['Contacts'],
+      invalidatesTags: (result, error, arg) =>
+        console.log({ result, error, arg }) || [
+          { type: 'Contacts', id: arg.id },
+        ],
     }),
   }),
 });
@@ -47,7 +54,7 @@ export const contactsApi = createApi({
 export const {
   useCreateContactMutation,
   useFetchContactsQuery,
-  useFetchContactByIdQuery,
+
   useUpdateContactMutation,
   useDeleteContactMutation,
 } = contactsApi;

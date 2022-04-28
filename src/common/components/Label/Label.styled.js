@@ -6,7 +6,7 @@ export const LabelStyled = styled.label`
   display: flex;
   flex-direction: ${({ type }) => T.every(v => v !== type) && 'column-reverse'};
   align-items: ${({ type }) => T.some(v => v === type) && 'center'};
-  gap: ${({ theme }) => theme.spacing(3)};
+  gap: ${({ theme }) => theme.spacing(2)};
 
   padding: ${({ type }) =>
     type !== 'textarea' &&
@@ -16,13 +16,6 @@ export const LabelStyled = styled.label`
     type === 'radio' && `1px solid ${theme.colors.lighterGrey}`};
 
   border-radius: ${({ theme }) => theme.spacing(1)};
-
-  > input,
-  > textarea {
-    width: ${({ type }) => T.every(v => v !== type) && '100%'};
-    border: 1px solid ${({ theme }) => theme.colors.secondary};
-    border-radius: ${({ theme }) => theme.spacing(1)};
-  }
 
   > textarea {
     max-width: 100%;

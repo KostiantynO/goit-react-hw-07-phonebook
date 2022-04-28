@@ -1,6 +1,5 @@
 import { styled } from 'common';
 import { ButtonStyled } from 'common/components/Button/Button.styled';
-import { LabelStyled } from 'common/components/Label/Label.styled';
 
 export const ContactItemStyled = styled.li`
   position: relative;
@@ -8,25 +7,17 @@ export const ContactItemStyled = styled.li`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: ${({ theme }) => theme.spacing(2)};
+
+  @media screen and (min-width: 768px) {
+    flex-wrap: nowrap;
+  }
 
   padding: ${({ theme }) => theme.spacing(2, 5, 2, 2)};
 
   border: 1px solid ${({ theme }) => theme.colors.lightGrey};
   border-radius: ${({ theme }) => theme.spacing(1)};
   outline: 1px solid ${({ theme }) => theme.colors.black};
-  ${({ theme }) => theme.transition('border-color, transform')}
-
-  @media screen and (min-width: 768px) {
-    /* width: calc(50% - 1 * ${({ theme }) => theme.spacing(3)}); */
-    gap: ${({ theme }) => theme.spacing(3)};
-  }
-
-  @media screen and (min-width: 1200px) {
-    /* width: calc(33% - 2 * ${({ theme }) => theme.spacing(3)}); */
-    gap: ${({ theme }) => theme.spacing(4)};
-  }
+  ${({ theme }) => theme.transition('border-color, transform')};
 
   :hover,
   :focus-within {
@@ -53,25 +44,34 @@ export const ContactItemStyled = styled.li`
 
     transform: ${({ completed }) => `scale(${completed ? 1 : 0})`};
   }
+`;
 
-  span {
-    text-decoration: ${({ completed }) => completed && '2px line-through'};
-    word-break: break-word;
+export const ContactLabel = styled.label`
+  @media screen and (min-width: 768px) {
+    flex-basis: 45%;
   }
 `;
 
-export const ContactLabel = styled(LabelStyled)`
-  input[type='checkbox'] {
-    width: clamp(24px, 2.1vw, 48px);
-    height: clamp(24px, 2.1vw, 48px);
-  }
+export const SelectContactCheckbox = styled.input.attrs({ type: 'checkbox' })`
+  width: clamp(20px, 3vw, 28px);
+  height: clamp(20px, 3vw, 28px);
 `;
 
-export const DeleteContactBtn = styled(ButtonStyled)`
+export const ContactEditInput = styled.input`
+  width: 100%;
+  padding: ${({ theme }) => theme.spacing(1, 2)};
+  font-size: inherit;
+  color: inherit;
+  word-break: break-word;
+  background-color: ${({ disabled }) => !disabled && 'transparent'};
+  border: none;
+`;
+
+export const DeleteContactButton = styled(ButtonStyled)`
   position: absolute;
   top: -${({ theme }) => theme.spacing(3)};
   right: -${({ theme }) => theme.spacing(2)};
-  z-index: ${({ theme }) => theme.zIndex('DeleteContactBtn'.toLowerCase())};
+  z-index: ${({ theme }) => theme.zIndex('DeleteContactButton'.toLowerCase())};
 
   padding: clamp(2px, 2.1vw, 4px);
 
@@ -88,4 +88,9 @@ export const DeleteContactBtn = styled(ButtonStyled)`
   &:hover svg {
     opacity: 1;
   }
+`;
+
+export const EditContactButton = styled(DeleteContactButton)`
+  right: ${({ theme }) => theme.spacing(12)};
+  z-index: ${({ theme }) => theme.zIndex('EditContactButton'.toLowerCase())};
 `;

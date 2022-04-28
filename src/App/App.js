@@ -15,6 +15,7 @@ import { ContactForm, ContactList, Filter } from 'components';
 
 import 'react-toastify/dist/ReactToastify.css';
 import { AppStyled } from './App.styled';
+import { LoadingIcon } from 'common/components/icons';
 
 export const App = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ export const App = () => {
 
   const [addContact] = useCreateContactMutation();
   const { data: contacts, isFetching } = useFetchContactsQuery();
-  const [deleteContact] = useDeleteContactMutation();
+  const [deleteContact, { isLoading: isDeleting }] = useDeleteContactMutation();
 
   const visibleContacts = contacts && getVisibleContacts(contacts, filter);
   const showContacts = visibleContacts && !isFetching;
@@ -64,7 +65,11 @@ export const App = () => {
           onClearFilter={onClearFilter}
         />
 
-        <Button onClick={batchDeleteContacts}>Delete selected contacts</Button>
+        <Button onClick={batchDeleteContacts} disabled={isDeleting}>
+          Delete selected
+        </Button>
+
+        {isFetching && <LoadingIcon width={36} />}
 
         {showContacts && (
           <ContactList

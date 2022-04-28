@@ -22,7 +22,7 @@ export const theme = Object.freeze({
      transition-property: ${args.join(', ')};`,
 
   zIndex: selector => {
-    const els = ['ContactItemStyled::after', 'DeleteContactBtn'];
+    const els = ['ContactItemStyled::after', 'DeleteContactButton'];
     for (let i = 0; i < els.length; i++) {
       if (selector === els[i].toLowerCase() || i === els.length) {
         return (i + 1) * 4;
